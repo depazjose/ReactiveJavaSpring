@@ -1,7 +1,7 @@
 package mdt.desa.web.task;
 
 
-import mdt.desa.web.task.controller.SampleUseCase;
+import mdt.desa.usecase.SampleUseCase;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 

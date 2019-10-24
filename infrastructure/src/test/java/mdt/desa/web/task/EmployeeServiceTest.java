@@ -1,7 +1,7 @@
 package mdt.desa.web.task;
 
 
-import mdt.desa.web.task.controller.SampleUseCase;
+import mdt.desa.usecase.SampleUseCase;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;

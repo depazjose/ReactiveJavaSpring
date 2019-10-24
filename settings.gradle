@@ -2,4 +2,8 @@ rootProject.name = 'base'
 include 'application'
 include 'domain'
 include 'infrastructure'
+include 'domain:model'
+findProject(':domain:model')?.name = 'model'
+include 'domain:usecase'
+findProject(':domain:usecase')?.name = 'usecase'
 
