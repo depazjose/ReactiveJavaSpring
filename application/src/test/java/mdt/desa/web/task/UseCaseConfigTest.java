@@ -1,7 +1,9 @@
 package mdt.desa.web.task;
 
 import static org.assertj.core.api.Assertions.*;
-import mdt.desa.web.task.controller.SampleUseCase;
+
+import mdt.desa.usecase.SampleUseCase;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;

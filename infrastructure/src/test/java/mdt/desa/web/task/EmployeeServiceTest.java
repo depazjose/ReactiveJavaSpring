@@ -1,6 +1,7 @@
 package mdt.desa.web.task;
 
 
+import mdt.desa.usecase.GenerateExcelUseCase;
 import mdt.desa.usecase.SampleUseCase;
 import org.junit.Before;
 import org.junit.Test;
@@ -25,6 +26,8 @@ public class EmployeeServiceTest {
 
     @MockBean
     private SampleUseCase useCase;
+    @MockBean
+    private GenerateExcelUseCase generateExcelUseCase;
     private final String userId = "35";
     private final String taskId = "56";
 

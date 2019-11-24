@@ -2,18 +2,24 @@ package mdt.desa.web.task;
 
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
+import mdt.desa.usecase.GenerateExcelUseCase;
 import mdt.desa.usecase.SampleUseCase;
 import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.InputStreamResource;
 import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.http.codec.multipart.FilePart;
+import org.springframework.http.codec.multipart.Part;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.util.Logger;
 import reactor.util.Loggers;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 
 @RestController
 @RequestMapping(value = "/employee", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -21,6 +27,7 @@ import java.io.InputStream;
 public class EmployeeService {
 
     private final SampleUseCase useCase;
+    private final GenerateExcelUseCase generateExcelUseCase;
     Logger logger = Loggers.getLogger(EmployeeService.class);
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, path = "/hello/msn")
@@ -43,7 +50,7 @@ public class EmployeeService {
         try {
             InputStream input = resource.getInputStream();
         } catch (IOException e) {
-            e.printStackTrace();
+            logger.error(e.getMessage());
         }
 
         try {
@@ -53,7 +60,46 @@ public class EmployeeService {
 
         } catch (IOException e) {
             logger.error(e.getMessage());
-            //e.printStackTrace();
+
         }
     }
+
+    @RequestMapping(value = "/upload", method = RequestMethod.POST,
+            consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public Flux<String> fileUpload(@RequestBody MultipartFile parts) throws IOException {
+        FilePart filePart = null;
+                String fileName = "";
+
+        if (parts instanceof  FilePart){
+            filePart = (FilePart) parts;
+            fileName = filePart.filename();
+        }
+
+        logger.info("fileName: "+ fileName);
+
+        File convertFile = new File(fileName);
+        convertFile.createNewFile();
+        //FileOutputStream fout = new FileOutputStream(convertFile);
+        //fout.write(parts.getgetBytes());
+        //fout.close();
+        return Flux.just("File is upload successfully");
+    }
+
+
+    @GetMapping(value = "/download")
+    public ResponseEntity<InputStreamResource> excelCustomersReport() throws IOException {
+
+
+        ByteArrayInputStream in = generateExcelUseCase.generateFromJson("Prices.xls");
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Content-Disposition", "attachment; filename=Prices.xls");
+
+        return ResponseEntity
+                .ok()
+                .headers(headers)
+                .body(new InputStreamResource(in));
+    }
+
+
 }
